@@ -273,6 +273,7 @@ export class InputRenderer extends Node {
   }
 
   addController(gripMatrix, handedness = 'right', profile = '') {
+    console.log("addController handedness=", handedness, " profile=", profile);
     if (!this._controllers || this._blurred) { return; }
     let controller = this._controllers[profile + "_" + handedness];
 
