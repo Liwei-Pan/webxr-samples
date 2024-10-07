@@ -246,6 +246,8 @@ export class InputRenderer extends Node {
       for (let inputSource of event.added) {
         if (inputSource.targetRayMode == 'tracked-pointer') {
           fetchProfile(inputSource, DEFAULT_PROFILES_PATH).then(({profile, assetPath}) => {
+          	console.log("useProfileControllerMeshes DEFAULT_PROFILES_PATH=",DEFAULT_PROFILES_PATH,
+          	  " ,profile=", profile, " assetPath=", assetPath, " profiles0=", inputSource.profiles[0] , " profiles1=", inputSource.profiles[1]);
             this.setControllerMesh(new Gltf2Node({url: assetPath}), inputSource.handedness, inputSource.profiles[0]);
           });
         }
@@ -273,7 +275,7 @@ export class InputRenderer extends Node {
   }
 
   addController(gripMatrix, handedness = 'right', profile = '') {
-    console.log("addController handedness=", handedness, " profile=", profile);
+    //liwe console.log("addController handedness=", handedness, " profile=", profile);
     if (!this._controllers || this._blurred) { return; }
     let controller = this._controllers[profile + "_" + handedness];
 
