@@ -296,6 +296,74 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             }
           },
         });
+        async function checkWebXRSupport() {
+        	   if (navigator.xr) {
+				        try {
+				            const isSupported = await navigator.xr.isSessionSupported('immersive-vr');
+				            console.log(`WebXR supported: ${isSupported}`);
+				
+				            if (isSupported) {
+				                const session = await navigator.xr.requestSession('immersive-vr');
+				                const features = await session.requestReferenceSpace('local');
+				
+				                const handInputSupported = session.inputSources.some(source => source.hand);
+				                console.log(`(copilet)WebXR Hand Input supported: ${handInputSupported}`);
+				
+				                const anchorsSupported = await session.requestHitTestSource ? true : false;
+				                console.log(`(copilet)WebXR Anchors supported: ${anchorsSupported}`);
+				
+				                const hitTestSupported = 'XRHitTestSource' in window;
+				                console.log(`(copilet)WebXR Hit Test supported: ${hitTestSupported}`);
+				                //google
+										    if (navigator.xr.isSessionSupported('immersive-vr', { features: ['hand-tracking'] })) {
+										      console.log("(Gemini)browser support webxr hand input");
+										    } else {
+										      console.log("(Gemini)browser not support webxr hand input");
+										    }
+										    if (navigator.xr.isSessionSupported('immersive-vr', { features: ['anchors'] })) {
+										      console.log("(Gemini)browser support WebXR anchors");
+										    } else {
+										      console.log("(Gemini)browser not support WebXR anchors");
+										    }
+				                //claude 3
+				                const handSupport = await navigator.xr.isSessionSupported('hand-tracking');
+								        console.log("(claude)support hand input:", handSupport ? "yes" : "no");
+
+								        const anchorSupport = 'anchor' in XRFrame.prototype;
+								        console.log("(claude)Anchors support:", anchorSupport ? "yes" : "no");
+								        //chatGPT
+                        navigator.xr.requestSession('immersive-vr').then((session) => {
+									        if (session.inputSources) {
+									          let handInputSupported = session.inputSources.some(inputSource => {
+									            return inputSource.hand;
+									          });
+									
+									          if (handInputSupported) {
+									            console.log("(chatGPT)browser support WebXR Hand Input");
+									          } else {
+									            console.log("(chatGPT)browser not support WebXR Hand Input");
+									          }
+									        }
+									        // 检查是否支持 Anchors
+									        if (session.updateWorldTrackingState) {
+									          const anchorSupport = session.updateWorldTrackingState({ anchors: true });
+									          console.log(`(chatGPT)Anchors support: ${!!anchorSupport}`);
+									        } else {
+									          console.log("(chatGPT)Anchors not");
+									        }
+									      }).catch((err) => {
+									        console.log("(chatGPT)cannot request WebXR session", err);
+									      });
+								        
+				                
+				            }
+				        } catch (error) {
+				            console.error('Error checking WebXR support:', error);
+				        }
+				    } else {
+				        console.log('WebXR not supported');
+				    }
+        }
 
         function updateSpaces(frame) {
           if (!primaryReferenceSpace) {
@@ -317,6 +385,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           }
         }
 
+        checkWebXRSupport();
         // Report if WebXR is supported at all.
         let webXRSupportStatus = '❌ - Your browser does not support WebXR';
         if ('xr' in window.navigator) {
