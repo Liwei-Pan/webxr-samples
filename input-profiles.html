@@ -181,6 +181,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               scene.inputRenderer.setControllerMesh(new Gltf2Node({url: assetPath}), inputSource.handedness, inputSource.profiles[0]);
             });
           }
+          console.log("profiles = "+inputSource.profiles);
+          if(inputSource.gamepad) console.log(" with gamepad");
+          if(inputSource.hand) console.log(" with hand");
         }
       }
 
